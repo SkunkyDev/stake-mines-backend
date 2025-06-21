@@ -1,27 +1,19 @@
-# api/mines_predict.py
-
+import json
 from stake_logic import generate_mines_layout
 
-def handler(request):
+def handler(event, context):
     try:
-        if request.method != "POST":
-            return {
-                "statusCode": 405,
-                "body": "Method Not Allowed"
-            }
-
-        data = request.get_json()
-        mines = data.get("mines", 3)
+        body = json.loads(event["body"])
+        mines = int(body.get("mines", 3))
         tiles = generate_mines_layout(mines)
-
         return {
             "statusCode": 200,
-            "headers": {"Content-Type": "application/json"},
-            "body": { "tiles": tiles }
+            "body": json.dumps({"tiles": tiles}),
+            "headers": {"Content-Type": "application/json"}
         }
-
     except Exception as e:
         return {
             "statusCode": 500,
-            "body": str(e)
+            "body": json.dumps({"error": str(e)}),
+            "headers": {"Content-Type": "application/json"}
         }
