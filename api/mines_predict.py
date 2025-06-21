@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from api.stake_logic import generate_mines_layout
+from stake_logic import generate_mines_layout
 
 
 app = Flask(__name__)
